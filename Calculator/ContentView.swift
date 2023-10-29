@@ -23,6 +23,12 @@ struct ContentView: View {
         // either current input or result
     
     
+    func ButtonComponent (number: Int) -> some View {
+        return Button("\(number)") {
+            input += String(number);
+            rightOperand = Int(input)
+        }
+    }
     
     var body: some View {
         VStack {
@@ -34,33 +40,21 @@ struct ContentView: View {
             Grid {
                 GridRow {
                     ForEach(7..<10) {number in
-                        Button("\(number)") {
-                            input += String(number);
-                            rightOperand = Int(input)
-                        }
+                        ButtonComponent(number: number)
                     }
                 }
                 GridRow {
                     ForEach(4..<7) {number in
-                        Button("\(number)") {
-                            input += String(number);
-                            rightOperand = Int(input)
-                        }
+                        ButtonComponent(number: number)
                     }
                 }
                 GridRow {
                     ForEach(1..<4) {number in
-                        Button("\(number)") {
-                            input += String(number);
-                            rightOperand = Int(input)
-                        }
+                        ButtonComponent(number: number)
                     }
                 }
                 GridRow {
-                    Button("0") {
-                        input += "0"
-                        rightOperand = Int(input)
-                    }
+                    ButtonComponent(number: 0)
                 }
             }
             Button("Clear") {
@@ -73,13 +67,16 @@ struct ContentView: View {
             // Need to store the operator value
             Button("Add"){
                 // "Operator Clicked" Logic
+                    // Refresh result -- add current input to "result"
                     // If "operand" is not nil, add(?) current input to result
                     // Value of current input is stored as operand
+                result = (rightOperand ?? 0) + (leftOperand ?? 0);
+                leftOperand = result;
+                input = ""
                     
-                    
-                leftOperand = rightOperand;
-                result = leftOperand ?? 0;
-                input = "";
+//                leftOperand = rightOperand;
+//                result = leftOperand ?? 0;
+//                input = "";
 //                rightOperand = nil;
             }
             Button("Equals"){
@@ -93,12 +90,15 @@ struct ContentView: View {
                 // right is always the most recent thing added
                 result = (rightOperand ?? 0) + (leftOperand ?? 0);
                 leftOperand = result;
+                rightOperand = 0;
                 input = ""
             }
         }
         .padding()
     }
 }
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
